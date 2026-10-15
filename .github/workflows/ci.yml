@@ -30,8 +30,27 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # Replace this step with the project's own checks — the toolchain setup
-      # (actions/setup-node, setup-python, swift-actions/setup-swift…), then lint,
-      # typecheck, test, build. Pin every action you add to a SHA, as above.
-      - name: No checks configured yet
-        run: echo "CI runs, but this project has not declared its checks yet."
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '20'
+
+      - name: Hook tests
+        run: node --test test/hook.test.js
+
+      - name: SKILL.md frontmatter is intact
+        run: |
+          head -1 skills/madenci/SKILL.md | grep -qx -- '---'
+          grep -q '^name: madenci' skills/madenci/SKILL.md
+          grep -q 'madenci:core' skills/madenci/SKILL.md
+
+      - name: Install into a sandbox home, verify, uninstall
+        run: |
+          node bin/madenci.js install --dry-run --all
+          export HOME="$RUNNER_TEMP/sandbox-home"
+          mkdir -p "$HOME"
+          node bin/madenci.js install --only claude,codex
+          test -f "$HOME/.claude/skills/madenci/SKILL.md"
+          test -f "$HOME/.claude/skills/madenci/references/audit.md"
+          test -f "$HOME/.codex/skills/madenci/SKILL.md"
+          node bin/madenci.js uninstall
+          test ! -e "$HOME/.claude/skills/madenci"

@@ -1,0 +1,40 @@
+{
+  "name": "madenci",
+  "version": "0.1.0",
+  "description": "Minimal-code mode for coding agents: dig where the ore is. The smallest complete change — reuse first, stdlib first, no unrequested abstraction or dependency.",
+  "bin": {
+    "madenci": "bin/madenci.js"
+  },
+  "files": [
+    "bin",
+    "skills",
+    "hooks",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/hook.test.js && node bin/madenci.js where"
+  },
+  "keywords": [
+    "agent-skill",
+    "skill",
+    "claude-code",
+    "codex",
+    "antigravity",
+    "gemini-cli",
+    "cursor",
+    "yagni",
+    "minimal",
+    "lean"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erayendes/madenci.git"
+  },
+  "homepage": "https://github.com/erayendes/madenci#readme",
+  "author": "erayendes",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
