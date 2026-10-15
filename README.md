@@ -1,5 +1,8 @@
 **Damarın olduğu yeri kazar. Başka yere kazma vurmaz.**
 
+<!-- Absolute URL on purpose: npm does not rewrite relative image paths. -->
+<img src="https://raw.githubusercontent.com/erayendes/madenci/main/assets/madenci.png" alt="madenci" width="520">
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Yerli üretim](https://img.shields.io/badge/YERL%C4%B0%20%C3%9CRET%C4%B0M-red?style=flat&label=%F0%9F%A4%9D&color=red&link=https%3A%2F%2Fmilowda.com)](https://milowda.com)
 
