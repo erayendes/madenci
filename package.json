@@ -13,7 +13,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node --test test/hook.test.js && node bin/madenci.js where"
+    "test": "node --test test/hook.test.js test/learn.test.js && node bin/madenci.js where"
   },
   "keywords": [
     "agent-skill",

@@ -34,8 +34,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Hook tests
-        run: node --test test/hook.test.js
+      - name: Tests
+        run: node --test test/hook.test.js test/learn.test.js
 
       - name: SKILL.md frontmatter is intact
         run: |
@@ -51,6 +51,7 @@ jobs:
           node bin/madenci.js install --only claude,codex
           test -f "$HOME/.claude/skills/madenci/SKILL.md"
           test -f "$HOME/.claude/skills/madenci/references/audit.md"
+          test -f "$HOME/.claude/skills/madenci/scripts/learn.js"
           test -f "$HOME/.codex/skills/madenci/SKILL.md"
           node bin/madenci.js uninstall
           test ! -e "$HOME/.claude/skills/madenci"

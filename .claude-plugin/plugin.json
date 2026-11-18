@@ -1,6 +1,6 @@
 {
   "name": "madenci",
-  "description": "Minimal-code mode. The smallest complete change that solves the task: reuse what exists, stdlib and platform first, no unrequested abstraction, dependency or \"for later\" code.\n\nCommands:\n- /madenci kalk — on (default)\n- /madenci yat — off\n- /madenci lite | full | ultra — level\n- /madenci debt — list every shortcut: marker\n- /madenci audit — lean-and-correct repo audit\n- /madenci help — the command list and the current state",
+  "description": "Minimal-code mode. The smallest complete change that solves the task: reuse what exists, stdlib and platform first, no unrequested abstraction, dependency or \"for later\" code.\n\nCommands:\n- /madenci kalk — on (default)\n- /madenci yat — off\n- /madenci lite | full | ultra — level for this project\n- /madenci debt — list every shortcut: marker\n- /madenci audit — lean-and-correct repo audit\n- /madenci learn — project rules from this repo's own history\n- /madenci help — the command list and the current state",
   "version": "0.1.0",
   "author": {
     "name": "Eray Endes",
