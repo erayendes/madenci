@@ -5,8 +5,8 @@ description: >
   stdlib and platform first, no unrequested abstraction, dependency or "for later" code. Use on
   any coding task (writing, fixing, refactoring, choosing a dependency) and when the user says
   madenci, "simplest solution", "yagni", "don't over-engineer", or complains about bloat.
-  Commands: /madenci kalk | yat | lite | full | ultra | debt | audit | help.
-argument-hint: "[kalk|yat|lite|full|ultra|debt|audit|help]"
+  Commands: /madenci kalk | yat | lite | full | ultra | debt | audit | learn | help.
+argument-hint: "[kalk|yat|lite|full|ultra|debt|audit|learn|help]"
 license: MIT
 ---
 
@@ -26,17 +26,20 @@ that is a separate concern (see "With oduncu").
 |---|---|
 | `/madenci kalk` (or bare `/madenci`) | On, at the current level (default `full`) |
 | `/madenci yat` | Off — write code normally |
-| `/madenci lite` · `full` · `ultra` | Set the level (and turn on) |
+| `/madenci lite` · `full` · `ultra` | Set the level for this project (and turn on) |
 | `/madenci debt` | Report every `shortcut:` marker in the repo. One-shot, changes nothing |
 | `/madenci audit` | Lean-and-correct audit of the repo. One-shot, changes nothing |
+| `/madenci learn` | Draft project rules from this repo's own history, and a level. Writes only on approval |
 | `/madenci help` | Print this table and the current state, then stop |
 
-On by default at `full`. Mode and level persist until changed. When the plugin's hooks are
+On by default at `full`. On/off is global; a level set in a project holds for that folder and
+below, elsewhere `full`. Both persist until changed. When the plugin's hooks are
 installed they persist across sessions and reach subagents too; without hooks, they hold for the
 session. Never switch off on your own, never drift back to writing more than the task needs.
 
-`debt` and `audit` are reports, not modes: run them, deliver, return to the state you were in.
-Their instructions are in `references/debt.md` and `references/audit.md` — read the file when
+`debt`, `audit` and `learn` are reports, not modes: run them, deliver, return to the state you
+were in. Their instructions are in `references/debt.md`, `references/audit.md` and
+`references/learn.md` — read the file when
 the command is given, not before.
 
 <!-- madenci:core -->

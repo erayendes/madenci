@@ -12,8 +12,8 @@
 
 # madenci
 
-Ona altın kazmasını söylersin, damara gider. Yeni bir maden açmaz, dağı baştan aşağı
-delmez, istemediğin taşı taşımaz. Çünkü o Age of Empires II'deki **madencidir** ve her kazma
+Ona altın kazmasını söylersiniz, damara gider. Yeni bir maden açmaz, dağı baştan aşağı
+delmez, istemediğiniz taşı taşımaz. Çünkü o Age of Empires II'deki **madencidir** ve her kazma
 darbesi bir sonraki kişinin okuyacağı, test edeceği, düzelteceği bir satırdır.
 
 Madenci ajanın **yazdığı kodu** yönetir: görevi çözen en küçük tam değişiklik.
@@ -48,25 +48,44 @@ Bilinen bir sınırı olan kestirme kodda işaretlenir:
 ```
 /madenci kalk               # aç (varsayılan: açık, full)
 /madenci yat                # kapat
-/madenci lite|full|ultra    # seviye
+/madenci lite|full|ultra    # bu projenin seviyesi
 /madenci debt               # tüm shortcut: işaretlerinin borç listesi
 /madenci audit              # depo denetimi: hata, risk, ölçek, silinecek kod
+/madenci learn              # projenin geçmişinden proje kuralları ve seviye önerisi
 /madenci help               # komutlar ve mevcut durum
 ```
 
 | Seviye | Davranış |
 |---|---|
-| `lite` | İsteneni yapar, daha küçük seçeneği tek satırda söyler, seçimi sana bırakır. |
+| `lite` | İsteneni yapar, daha küçük seçeneği tek satırda söyler, seçimi size bırakır. |
 | `full` | Kuralların tamamı. Varsayılan. |
 | `ultra` | İsteği de sorgular: ihtiyacın haklı çıkarmadığı kısma yapmadan önce itiraz eder. |
 
-`debt` ve `audit` mod değil, rapor: çalışır, teslim eder, koda dokunmaz.
+Seviye proje bazlıdır: ayarlandığı klasörde ve altında geçerli, başka yerde `full`. Açık/kapalı
+her yerde aynıdır.
+
+`debt`, `audit` ve `learn` mod değil, rapor: çalışır, teslim eder, koda dokunmaz.
+
+## learn
+
+`/madenci learn` bu projenin Claude Code oturum kayıtlarını ve git geçmişini yerelde okur.
+Ajan kod düzenledikten hemen sonra yazdıklarınıza bakar: budattığınız ("gereksiz", "too much",
+"überflüssig", "不要"…) ve eksiği tamamlattığınız yerleri bulur. Kelimeler on bir dilde aranır;
+başka bir dilde yazdıysanız da ajanın hemen ardından satır silmesi aynı sinyali verir. Bulunanlar
+o anda düzenlenen dosyalarla birlikte ajana verilir. Ajan bunlardan
+bu depoya özel kurallar çıkarır ("tarihler için `utils/date` var, kütüphane ekleme") ve bir seviye
+önerir. Önce taslak gösterilir; onay verirseniz kurallar `CLAUDE.local.md`'ye yazılır. Seviyeyi
+siz yazarsınız. Kanıtı terminalde görmek için: `npx madenci learn`.
+
+Komutu hatırlamanız gerekmez: hook'lar kuruluysa yeni bir oturum açıldığında, son `learn`'den beri
+en az üç yeni sinyal birikmişse ajan ilk yanıtında bunu tek satırla hatırlatır. Proje başına
+haftada en fazla bir kez.
 
 ## oduncu ile
 
 [oduncu](https://github.com/erayendes/oduncu) sohbeti yönetir, madenci kodu. Biri az
 konuşur, öteki az kazar; ikisi birlikte çalışır. Oduncu açıkken madenci'nin kapanış notu
-("şunu atladım") düşer — sorarsan cevap gelir. Gerçek bir risk (veri kaybı, güvenlik) yine
+("şunu atladım") düşer — sorarsanız cevap gelir. Gerçek bir risk (veri kaybı, güvenlik) yine
 tek satırla söylenir.
 
 ## Kurulum
@@ -104,14 +123,19 @@ Hook'suz kurulumda madenci oturum boyunca açık kalır ama alt ajanlara ulaşma
 
 ## Hook'lar ne yapar
 
-Üç hook, tek dosya ([`hooks/madenci.js`](hooks/madenci.js), ~100 satır). Ağa çıkmaz.
-Yalnızca bir durum dosyasını okur/yazar: `~/.config/madenci/state.json` (Windows'ta
-`%APPDATA%\madenci\`).
+Dört hook, tek dosya ([`hooks/madenci.js`](hooks/madenci.js), ~190 satır). Ağa çıkmaz.
+Bir durum dosyasını okur/yazar: `~/.config/madenci/state.json` (Windows'ta
+`%APPDATA%\madenci\`); bekçi ayrıca düzenlenen dosyayı okur.
 
-- **SessionStart:** madenci açıksa kuralları context'e ekler.
+- **SessionStart:** madenci açıksa kuralları context'e ekler; yeni oturumda, birikmiş sinyal
+  varsa `/madenci learn` hatırlatmasını da (haftada en fazla bir kez). Bunun için bu projenin oturum
+  kayıtlarını okur.
 - **SubagentStart:** aynısını her alt ajana.
 - **UserPromptSubmit:** `/madenci kalk|yat|lite|full|ultra` komutlarını durum dosyasına yazar.
   Başka hiçbir mesaja tepki vermez.
+- **PreToolUse (bekçi):** bir düzenleme `package.json` ya da `requirements*.txt`'ye yeni bağımlılık
+  ekliyorsa veya test dışı yeni bir dosya açıyorsa ajana tek satır hatırlatma ekler. Hiçbir işi
+  engellemez.
 
 ## Teşekkür
 
@@ -154,9 +178,10 @@ and `/madenci debt` collects them, so a deferral never quietly becomes permanent
 ```
 /madenci kalk               # on (default: on, full)
 /madenci yat                # off
-/madenci lite|full|ultra    # level
+/madenci lite|full|ultra    # level for this project
 /madenci debt               # ledger of every shortcut: marker
 /madenci audit              # repo audit: bugs, risk, scale, code to delete
+/madenci learn              # project rules and a level, from this repo's own history
 /madenci help               # commands and current state
 ```
 
@@ -166,7 +191,25 @@ and `/madenci debt` collects them, so a deferral never quietly becomes permanent
 | `full` | All the rules. Default. |
 | `ultra` | Also questions the request: pushes back on any part the need doesn't justify. |
 
-`debt` and `audit` are reports, not modes: they run, deliver, and change no code.
+The level is per project: it holds in the folder it was set in and below, `full` elsewhere.
+On/off is the same everywhere.
+
+`debt`, `audit` and `learn` are reports, not modes: they run, deliver, and change no code.
+
+## learn
+
+`/madenci learn` reads this project's Claude Code transcripts and git log, locally. It looks at what
+you wrote right after the agent edited code: where you trimmed it ("unnecessary", "too much",
+"überflüssig", "不要"…) and where you had it finish what it left out. The words are matched in
+eleven languages; in any other, the agent removing lines right after gives the same signal. The
+findings go to the agent with the files edited at the time. The agent
+turns them into rules for this repo ("dates: use `utils/date`, never add a library") and suggests
+a level. You see a draft first; on approval the rules go to `CLAUDE.local.md`. You set the level
+yourself. To see the raw evidence in a terminal: `npx madenci learn`.
+
+No need to remember the command: with the hooks installed, when a new session starts and at least
+three new signals have piled up since the last `learn`, the agent mentions it in one line in its
+first reply. At most once a week per project.
 
 ## With oduncu
 
@@ -199,13 +242,18 @@ Without hooks, madenci stays on for the session but does not reach subagents.
 
 ## What the hooks do
 
-Three hooks, one file ([`hooks/madenci.js`](hooks/madenci.js), ~100 lines). No network. They
-read and write one state file: `~/.config/madenci/state.json` (`%APPDATA%\madenci\` on Windows).
+Four hooks, one file ([`hooks/madenci.js`](hooks/madenci.js), ~190 lines). No network. They
+read and write one state file: `~/.config/madenci/state.json` (`%APPDATA%\madenci\` on Windows);
+the guard also reads the file being edited.
 
-- **SessionStart:** if madenci is on, adds the rules to context.
+- **SessionStart:** if madenci is on, adds the rules to context; in a new session with evidence
+  piled up, also the `/madenci learn` reminder (at most weekly). For that it reads this project's
+  transcripts.
 - **SubagentStart:** the same, for every subagent.
 - **UserPromptSubmit:** records `/madenci kalk|yat|lite|full|ultra` in the state file. Reacts to
   nothing else.
+- **PreToolUse (guard):** when an edit adds a dependency to `package.json` or `requirements*.txt`,
+  or creates a new non-test file, adds a one-line reminder for the agent. Never blocks anything.
 
 ## Credit
 

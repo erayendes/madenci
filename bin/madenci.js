@@ -87,6 +87,7 @@ function help() {
   npx madenci install --dry-run    show what would happen
   npx madenci uninstall            remove it everywhere
   npx madenci where                show paths and what is installed
+  npx madenci learn [--project dir]  evidence for project rules, from local transcripts and git log
 
 Targets: ${TARGETS.map((t) => t.id).join(', ')}
 
@@ -94,4 +95,6 @@ Nothing is written until you run install — no postinstall hook touches your ho
 directory. https://github.com/erayendes/madenci`);
 }
 
-({ install, uninstall, where, help }[cmd] || help)();
+const learn = () => require(path.join(SRC, 'scripts', 'learn.js')).main(argv);
+
+({ install, uninstall, where, learn, help }[cmd] || help)();
