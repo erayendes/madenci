@@ -1,6 +1,6 @@
 {
   "name": "madenci",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Minimal-code mode for coding agents: dig where the ore is. The smallest complete change — reuse first, stdlib first, no unrequested abstraction or dependency.",
   "bin": {
     "madenci": "bin/madenci.js"

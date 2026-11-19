@@ -10,8 +10,8 @@ authors:
 repository-code: "https://github.com/erayendes/madenci"
 url: "https://github.com/erayendes/madenci"
 license: MIT
-version: 0.1.0
-date-released: "2026-10-15"
+version: 0.2.0
+date-released: "2026-11-19"
 keywords:
   - agent-skills
   - claude-code
